@@ -188,6 +188,9 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.SELTOS:
       ret.mass = 1310. + STD_CARGO_KG
       ret.wheelbase = 2.6
+    elif candidate == CAR.SOUL_EV:
+      ret.mass = 1375. + STD_CARGO_KG
+      ret.wheelbase = 2.6
 
     ret.centerToFront = ret.wheelbase * 0.4
 

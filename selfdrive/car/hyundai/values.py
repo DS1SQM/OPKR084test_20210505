@@ -52,6 +52,7 @@ class CAR:
   K7 = "KIA K7 2016-2019"
   K7_HEV = "KIA K7 HEV 2016-2019"
   SELTOS = "KIA SELTOS 2021"
+  SOUL_EV = "KIA SOUL EV 2019"
 
 class Buttons:
   NONE = 0
@@ -108,7 +109,8 @@ if Params().get_bool("FingerprintIssuedFix"):
     CAR.CEED: [{}],
     CAR.K7: [{}],  
     CAR.K7_HEV: [{}],
-    CAR.SELTOS: [{}]
+    CAR.SELTOS: [{}],
+    CAR.SOUL_EV: [{}]
   }
 else:
   FINGERPRINTS = {
@@ -359,6 +361,9 @@ else:
     }],
     CAR.SELTOS: [{
       67: 8, 127: 8, 304: 8, 320: 8, 339: 8, 356: 4, 524: 8, 544: 8, 593: 8, 608: 8, 688: 6, 809: 8, 832: 8, 854: 8, 870: 7, 871: 8, 872: 8, 897: 8, 902: 8, 905: 8, 909: 8, 910: 5, 911: 5, 913: 8, 916: 8, 1040: 8, 1042: 8, 1056: 8, 1057: 8, 1064: 8, 1078: 4, 1102: 8, 1107: 5, 1114: 8, 1136: 8, 1145: 8, 1151: 8, 1155: 8, 1156: 8, 1157: 4, 1162: 8, 1164: 8, 1168: 8, 1170: 8, 1173: 8, 1186: 2, 1191: 2, 1225: 8, 1265: 4, 1280: 8, 1287: 4, 1290: 8, 1292: 8, 1294: 8, 1312: 8, 1322: 8, 1342: 6, 1345: 8, 1348: 8, 1363: 8, 1369: 8, 1379: 8, 1384: 8, 1394: 8, 1407: 8, 1419: 8, 1427: 6, 1446: 8, 1456: 4, 1470: 8, 1485: 8, 1988: 8, 1996: 8, 2000: 8, 2004: 8, 2008: 8, 2012: 8, 2015: 8
+    }],
+    CAR.SOUL_EV: [{
+      127: 8, 304: 8, 320: 8, 339: 8, 352: 8, 356: 4, 544: 8, 546: 8, 548: 8, 549: 8, 593: 8, 688: 6, 832: 8, 881: 8, 882: 8, 897: 8, 902: 8, 903: 8, 905: 8, 909: 8, 913: 8, 916: 8, 1040: 8, 1042: 8, 1056: 8, 1057: 8, 1078: 4, 1136: 8, 1151: 6, 1155: 8, 1156: 8, 1157: 4, 1162: 8, 1164: 8, 1168: 7, 1173: 8, 1186: 2, 1191: 2, 1193: 8, 1225: 8, 1227: 8, 1265: 4, 1280: 1, 1287: 4, 1290: 8, 1291: 8, 1292: 8, 1294: 8, 1312: 8, 1322: 8, 1342: 6, 1345: 8, 1348: 8, 1355: 8, 1363: 8, 1369: 8, 1378: 8, 1379: 8, 1407: 8, 1419: 8, 1426: 8, 1427: 6, 1429: 8, 1430: 8, 1456: 4, 1470: 8, 1473: 8, 1507: 8, 1535: 8
     }]
   }
 
@@ -576,7 +581,7 @@ if Params().get_bool("FingerprintTwoSet"):
   }
 
 CHECKSUM = {
-  "crc8": [CAR.SANTA_FE, CAR.SONATA, CAR.PALISADE, CAR.SONATA_HEV, CAR.SELTOS, CAR.AVANTE],
+  "crc8": [CAR.SANTA_FE, CAR.SONATA, CAR.PALISADE, CAR.SONATA_HEV, CAR.SELTOS, CAR.AVANTE, CAR.SOUL_EV],
   "6B": [CAR.SORENTO, CAR.GENESIS],
 }
 
@@ -587,12 +592,12 @@ FEATURES = {
   "use_tcu_gears": {CAR.K5, CAR.SONATA19, CAR.VELOSTER},
   # Use E_GEAR Message for Gear Selection
   "use_elect_gears": {CAR.SONATA_HEV, CAR.SONATA19_HEV, CAR.KONA_EV, CAR.KONA_HEV, CAR.IONIQ_EV, CAR.IONIQ_HEV, CAR.GRANDEUR_HEV, CAR.NEXO,
-                      CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV},
+                      CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV, CAR.SOUL_EV},
   # Use E_EMS11 Message for Gas and Brake for Hybrid/ELectric
   "use_elect_ems": {CAR.SONATA_HEV, CAR.SONATA19_HEV, CAR.KONA_EV, CAR.KONA_HEV, CAR.IONIQ_EV, CAR.IONIQ_HEV, CAR.GRANDEUR_HEV, CAR.NEXO,
-                    CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV},
+                    CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV, CAR.SOUL_EV},
   # send LFA MFA message for new HKG models
-  "send_lfahda_mfa": {CAR.SONATA, CAR.PALISADE, CAR.SONATA_HEV, CAR.SANTA_FE, CAR.KONA_EV, CAR.NIRO_EV, CAR.KONA_HEV, CAR.SELTOS}, # Insert your car in this if you want turn LFA icon on.
+  "send_lfahda_mfa": {CAR.SONATA, CAR.PALISADE, CAR.SONATA_HEV, CAR.SANTA_FE, CAR.KONA_EV, CAR.NIRO_EV, CAR.KONA_HEV, CAR.SELTOS, CAR.SOUL_EV}, # Insert your car in this if you want turn LFA icon on.
   "has_scc13": set([]),
   "has_scc14": set([]),
   # these cars use the FCA11 message for the AEB and FCW signals, all others use SCC12
@@ -601,7 +606,7 @@ FEATURES = {
   "use_bsm": {CAR.SONATA, CAR.PALISADE, CAR.GENESIS, CAR.GENESIS_G70, CAR.GENESIS_G80, CAR.GENESIS_G90, CAR.NEXO,
               CAR.KONA, CAR.SONATA_HEV, CAR.SONATA19_HEV, CAR.KONA_EV, CAR.KONA_HEV, CAR.IONIQ_EV, CAR.IONIQ_HEV, CAR.GRANDEUR_HEV,
               CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV, CAR.AVANTE, CAR.KONA, CAR.I30, CAR.K7, CAR.GRANDEUR,
-              CAR.K5, CAR.SONATA19, CAR.VELOSTER, CAR.SELTOS},
+              CAR.K5, CAR.SONATA19, CAR.VELOSTER, CAR.SELTOS, CAR.SOUL_EV},
 }
 
 DBC = {
@@ -641,6 +646,7 @@ DBC = {
   CAR.K7: dbc_dict('hyundai_kia_generic', None),
   CAR.K7_HEV: dbc_dict('hyundai_kia_generic', None),
   CAR.SELTOS: dbc_dict('hyundai_kia_generic', None),
+  CAR.SOUL_EV: dbc_dict('hyundai_kia_generic', None),
 }
 
 STEER_THRESHOLD = int(Params().get("SteerThreshold"))
