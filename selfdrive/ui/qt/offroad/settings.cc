@@ -447,6 +447,7 @@ QWidget * user_panel(QWidget * parent) {
   layout->addWidget(new CruiseGapAdjustToggle());
   layout->addWidget(new AutoEnabledToggle());
   layout->addWidget(new CruiseAutoResToggle());
+  layout->addWidget(new RESChoice());
   layout->addWidget(new SteerWindDownToggle());
 
   layout->addWidget(horizontal_line());

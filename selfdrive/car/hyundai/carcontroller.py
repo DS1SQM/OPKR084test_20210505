@@ -111,11 +111,10 @@ class CarController():
     self.opkr_autoresume = self.params.get_bool("OpkrAutoResume")
     self.opkr_cruisegap_auto_adj = self.params.get_bool("CruiseGapAdjust")
     self.opkr_cruise_auto_res = self.params.get_bool("CruiseAutoRes")
+    self.opkr_cruise_auto_res_option = int(self.params.get("AutoResOption"))
 
     self.opkr_turnsteeringdisable = self.params.get_bool("OpkrTurnSteeringDisable")
-
     self.steer_wind_down_enabled = self.params.get_bool("SteerWindDown")
-
     self.opkr_maxanglelimit = float(int(self.params.get("OpkrMaxAngleLimit")))
 
     self.steer_mode = ""
@@ -320,7 +319,8 @@ class CarController():
     self.apply_accel_last = apply_accel
     self.apply_steer_last = apply_steer
 
-    if CS.acc_active and CS.lead_distance > 149 and self.dRel < ((CS.out.vEgo * CV.MS_TO_KPH)+5) < 100 and self.vRel < -5 and CS.out.vEgo > 7 and abs(lateral_plan.steerAngleDesireDeg) < 15:
+    if CS.acc_active and CS.lead_distance > 149 and self.dRel < ((CS.out.vEgo * CV.MS_TO_KPH)+5) < 100 and \
+     self.vRel < -(CS.out.vEgo * CV.MS_TO_KPH * 0.16) and CS.out.vEgo > 7 and abs(lateral_plan.steerAngleDesireDeg) < 10:
       self.need_brake_timer += 1
       if self.need_brake_timer > 50:
         self.need_brake = True
@@ -502,10 +502,14 @@ class CarController():
       else: 
         self.res_speed = 0
 
-    if self.model_speed > 95 and self.cancel_counter == 0 and not CS.acc_active and not CS.out.brakeLights and int(CS.VSetDis) > 30 and (CS.lead_distance < 149 or int(CS.clu_Vanz) > 30) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL))  # auto res
-      self.res_speed = int(CS.clu_Vanz*1.1)
-      self.res_speed_timer = 350
+    if self.model_speed > 95 and self.cancel_counter == 0 and not CS.acc_active and not CS.out.brakeLights and int(CS.VSetDis) > 30 and \
+     (CS.lead_distance < 149 or int(CS.clu_Vanz) > 30) and int(CS.clu_Vanz) >= 3 and self.auto_res_timer <= 0 and self.opkr_cruise_auto_res:
+      if self.opkr_cruise_auto_res_option == 0:
+        can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.RES_ACCEL))  # auto res
+        self.res_speed = int(CS.clu_Vanz*1.1)
+        self.res_speed_timer = 350
+      elif self.opkr_cruise_auto_res_option == 1:
+        can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))  # auto res but set_decel to set current speed
       if self.auto_res_timer <= 0:
         self.auto_res_timer = randint(10, 15)
     elif self.auto_res_timer > 0 and self.opkr_cruise_auto_res:

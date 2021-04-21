@@ -168,6 +168,7 @@ keys = {
   b"CruiseGapAdjust": [TxType.PERSISTENT],
   b"AutoEnable": [TxType.PERSISTENT],
   b"CruiseAutoRes": [TxType.PERSISTENT],
+  b"AutoResOption": [TxType.PERSISTENT],
   b"SteerWindDown": [TxType.PERSISTENT],
 }
 

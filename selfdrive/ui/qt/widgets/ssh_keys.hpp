@@ -95,7 +95,7 @@ class CruiseAutoResToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  CruiseAutoResToggle() : ToggleControl("자동 RES 사용", "크루즈 사용중 브레이크나 CANCEL을 눌러 대기모드 상태로 변한경우 가속페달을 밟으면 다시 이전 속도로 세팅합니다. 크루즈 속도가 세팅되어 있고 차량속도가 30km/h 이상 혹은 앞차가 인식될 경우 작동합니다.", "../assets/offroad/icon_shell.png", Params().getBool("CruiseAutoRes")) {
+  CruiseAutoResToggle() : ToggleControl("자동 RES 사용", "크루즈 사용중 브레이크를 밟아 대기모드 상태로 변한경우(CANCEL은 해당없음) 브레이크 페달 해제시 다시 이전 속도로 세팅합니다. 크루즈 속도가 세팅되어 있고 차량속도가 30km/h 이상 혹은 앞차가 인식될 경우 작동합니다.", "../assets/offroad/icon_shell.png", Params().getBool("CruiseAutoRes")) {
     QObject::connect(this, &CruiseAutoResToggle::toggleFlipped, [=](int state) {
       char value = state ? '1' : '0';
       Params().put("CruiseAutoRes", &value, 1);
@@ -1136,4 +1136,18 @@ public:
 private:
   QLabel local_hash;
   QLabel remote_hash;
+};
+
+class RESChoice : public AbstractControl {
+  Q_OBJECT
+
+public:
+  RESChoice();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+
+  void refresh();
 };

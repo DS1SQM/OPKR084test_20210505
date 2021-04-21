@@ -19,9 +19,9 @@ InnerLoopGain:35
 OuterLoopGain:20
 TimeConstant:14
 ActuatorEffectiveness:20
-Scale:1750
-LqrKi:10
-DcGain:30
+Scale:1500
+LqrKi:15
+DcGain:27
 IgnoreZone:1
 PidKp:20
 PidKi:40
@@ -40,7 +40,7 @@ SteerDeltaUpBaseAdj:3
 SteerDeltaUpAdj:3
 SteerDeltaDownBaseAdj:7
 SteerDeltaDownAdj:7
-SteerMaxvAdj:10
+SteerMaxvAdj:13
 OpkrBatteryChargingControl:1
 OpkrBatteryChargingMin:70
 OpkrBatteryChargingMax:80
@@ -66,3 +66,10 @@ OpkrMapDecelOnly:0
 JustDoGearD:0
 ComIssueGone:0
 SteerThreshold:150
+RecordingCount:100
+RecordingQuality:1
+CruiseGapAdjust:0
+AutoEnable:1
+CruiseAutoRes:0
+AutoResOption:0
+SteerWindDown:0

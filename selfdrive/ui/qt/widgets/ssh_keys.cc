@@ -1376,6 +1376,73 @@ void SpeedLimitOffset::refresh() {
   btnplus.setText("＋");
 }
 
+RESChoice::RESChoice() : AbstractControl("자동 RES 옵션", "자동RES옵션을 설정합니다ㅏ. 1. 일시적 크루즈속도 조정, 2. 설정속도 자체를 조정", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("AutoResOption"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 0 ) {
+      value = 0;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("AutoResOption", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("AutoResOption"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 1 ) {
+      value = 1;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("AutoResOption", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void RESChoice::refresh() {
+  QString option = QString::fromStdString(Params().get("AutoResOption"));
+  if (option == "0") {
+    label.setText(QString::fromStdString("크루즈속도조정"));
+  } else {
+    label.setText(QString::fromStdString("설정속도조정"));
+  }
+  btnminus.setText("◀");
+  btnplus.setText("▶");
+}
+
+//판다값
 MaxSteer::MaxSteer() : AbstractControl("MAX_STEER", "판다 MAX_STEER 값을 수정합니다. 적용하려면 아래 실행 버튼을 누르세요.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
