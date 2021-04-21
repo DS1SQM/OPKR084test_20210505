@@ -211,6 +211,7 @@ CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거
   vehicle_select_menu->addAction("NIRO_HEV", [=]() {carname = "NIRO_HEV";});
   vehicle_select_menu->addAction("CEED", [=]() {carname = "CEED";});
   vehicle_select_menu->addAction("SELTOS", [=]() {carname = "SELTOS";});
+  vehicle_select_menu->addAction("SOUL_EV", [=]() {carname = "SOUL_EV";});
 
   QPushButton *set_vehicle_btn = new QPushButton("차량선택");
   set_vehicle_btn->setMenu(vehicle_select_menu);
