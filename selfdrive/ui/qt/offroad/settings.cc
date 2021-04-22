@@ -426,6 +426,8 @@ QWidget * user_panel(QWidget * parent) {
                                           std::system(record_del);
                                         }
                                       }));
+  layout->addWidget(new MonitoringMode());
+  layout->addWidget(new MonitorEyesThreshold());
 
   layout->addWidget(horizontal_line());
   layout->addWidget(new LabelControl("주행설정", ""));

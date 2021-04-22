@@ -170,6 +170,9 @@ keys = {
   b"CruiseAutoRes": [TxType.PERSISTENT],
   b"AutoResOption": [TxType.PERSISTENT],
   b"SteerWindDown": [TxType.PERSISTENT],
+  b"SteerWindDown": [TxType.PERSISTENT],
+  b"OpkrMonitoringMode": [TxType.PERSISTENT],
+  b"OpkrMonitorEyesThreshold": [TxType.PERSISTENT],
 }
 
 def ensure_bytes(v):

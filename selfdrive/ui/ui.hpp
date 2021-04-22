@@ -69,6 +69,7 @@ const Rect map_overlay_btn = {0, 465, 150, 150};
 const Rect map_btn = {1585, 905, 140, 140};
 const Rect rec_btn = {1745, 905, 140, 140};
 const Rect laneless_btn = {1425, 905, 140, 140};
+const Rect monitoring_btn = {50, 830, 140, 140};
 
 const int UI_FREQ = 20;   // Hz
 
@@ -167,6 +168,7 @@ typedef struct UIScene {
   int recording_quality;
   float steerMax_V;
   int speed_lim_off;
+  int monitoring_mode;
 
   NetStatus athenaStatus;
 

@@ -112,6 +112,19 @@ void HomeWindow::mousePressEvent(QMouseEvent* e) {
     }
     return;
   }
+  // Monitoring mode
+  if (ui_state->scene.started && ui_state->sidebar_collapsed && !ui_state->scene.map_on_top && monitoring_btn.ptInRect(e->x(), e->y())) {
+    ui_state->scene.monitoring_mode = ui_state->scene.monitoring_mode + 1;
+    if (ui_state->scene.monitoring_mode > 1) {
+      ui_state->scene.monitoring_mode = 0;
+    }
+    if (ui_state->scene.monitoring_mode == 0) {
+      Params().put("OpkrMonitoringMode", "0", 1);
+    } else if (ui_state->scene.monitoring_mode == 1) {
+      Params().put("OpkrMonitoringMode", "1", 1);
+    }
+    return;
+  }
 
   // Handle sidebar collapsing
   if (ui_state->scene.started && (e->x() >= ui_state->viz_rect.x - bdr_s)) {
@@ -314,6 +327,7 @@ void GLWindow::initializeGL() {
   ui_state.scene.recording_count = std::stoi(Params().get("RecordingCount"));
   ui_state.scene.recording_quality = std::stoi(Params().get("RecordingQuality"));
   ui_state.scene.speed_lim_off = std::stoi(Params().get("OpkrSpeedLimitOffset"));
+  ui_state.scene.monitoring_mode = std::stoi(Params().get("OpkrMonitoringMode"));
 }
 
 void GLWindow::backlightUpdate() {

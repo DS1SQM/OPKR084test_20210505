@@ -73,3 +73,5 @@ AutoEnable:1
 CruiseAutoRes:0
 AutoResOption:0
 SteerWindDown:0
+OpkrMonitoringMode:0
+OpkrMonitorEyesThreshold:75

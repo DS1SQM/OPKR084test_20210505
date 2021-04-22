@@ -10,6 +10,7 @@ from common.params import Params
 
 EnableLogger = Params().get_bool("OpkrEnableLogger")
 EnableDriverMonitoring = Params().get_bool("OpkrEnableDriverMonitoring")
+MonitorEyesThreshold = int(Params().get("OpkrMonitorEyesThreshold")) * 0.01
 EventName = car.CarEvent.EventName
 
 # ******************************************************************************************
@@ -135,6 +136,8 @@ class DriverStatus():
     self.hi_std_alert_enabled = True
     self.threshold_prompt = _DISTRACTED_PROMPT_TIME_TILL_TERMINAL / _DISTRACTED_TIME
 
+    self.monitoring_mode = 0
+
     self._set_timers(active_monitoring=True)
 
   def _set_timers(self, active_monitoring):
@@ -194,6 +197,7 @@ class DriverStatus():
     self.blink.cfactor = interp(ep, [0, 0.5, 1], [_BLINK_THRESHOLD_STRICT, _BLINK_THRESHOLD, _BLINK_THRESHOLD_SLACK])/_BLINK_THRESHOLD
 
   def get_pose(self, driver_state, cal_rpy, car_speed, op_engaged):
+    self.monitoring_mode = int(Params().get("OpkrMonitoringMode"))
     if not all(len(x) > 0 for x in [driver_state.faceOrientation, driver_state.facePosition,
                                     driver_state.faceOrientationStd, driver_state.facePositionStd]):
       return
@@ -209,10 +213,16 @@ class DriverStatus():
     self.blink.left_blink = driver_state.leftBlinkProb * (driver_state.leftEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
     self.blink.right_blink = driver_state.rightBlinkProb * (driver_state.rightEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
 
-    self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
-                              driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
-                             ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > _E2E_EYES_THRESHOLD) and
-                              (self.face_detected and not self.face_partial))
+    if self.monitoring_mode == 0:
+      self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
+                                driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
+                               ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > _E2E_EYES_THRESHOLD) and
+                                (self.face_detected and not self.face_partial))
+    elif self.monitoring_mode == 1:
+      self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
+                                driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
+                               ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > MonitorEyesThreshold) and
+                                (self.face_detected and not self.face_partial))
     self.driver_distraction_filter.update(self.driver_distracted)
 
     # update offseter

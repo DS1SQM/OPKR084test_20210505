@@ -118,6 +118,8 @@ def manager_init():
     ("CruiseAutoRes", "0"),
     ("AutoResOption", "0"),
     ("SteerWindDown", "0"),
+    ("OpkrMonitoringMode", "0"),
+    ("OpkrMonitorEyesThreshold", "75"),
   ]
 
   if params.get_bool("RecordFrontLock"):

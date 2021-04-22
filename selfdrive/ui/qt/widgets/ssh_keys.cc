@@ -788,6 +788,137 @@ void RecordQuality::refresh() {
   btnplus.setText("▶");
 }
 
+MonitoringMode::MonitoringMode() : AbstractControl("모니터링 모드 설정", "모니터링 모드를 설정합니다. 기본설정/졸음방지, 졸음방지의 경우 아래 Threshold 값을 조정(낮춤)하여 좀더 빨리 경고메시지를 보낼 수 있습니다.", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitoringMode"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 0 ) {
+      value = 0;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitoringMode", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitoringMode"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 1 ) {
+      value = 1;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitoringMode", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void MonitoringMode::refresh() {
+  QString option = QString::fromStdString(Params().get("OpkrMonitoringMode"));
+  if (option == "0") {
+    label.setText(QString::fromStdString("기본설정"));
+  } else if (option == "1") {
+    label.setText(QString::fromStdString("졸음방지"));
+  }
+  btnminus.setText("◀");
+  btnplus.setText("▶");
+}
+
+MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("EYEMonitor Threshold", "눈 깜빡임 정도에 대한 기준값을 조정합니다. 낮출수록 더 엄격하게 적용하여 일찍 경고를 보냅니다.", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorEyesThreshold"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 1 ) {
+      value = 1;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorEyesThreshold", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorEyesThreshold"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 100 ) {
+      value = 100;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorEyesThreshold", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void MonitorEyesThreshold::refresh() {
+  auto strs = QString::fromStdString(Params().get("OpkrMonitorEyesThreshold"));
+  int valuei = strs.toInt();
+  float valuef = valuei * 0.01;
+  QString valuefs = QString::number(valuef);
+  label.setText(QString::fromStdString(valuefs.toStdString()));
+  btnminus.setText("－");
+  btnplus.setText("＋");
+}
+
 //주행
 VariableCruiseProfile::VariableCruiseProfile() : AbstractControl("크루즈 가감속 프로파일", "크루즈 가감속 프로파일을 설정합니다. follow/relaxed", "../assets/offroad/icon_shell.png") {
 

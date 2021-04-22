@@ -1151,3 +1151,31 @@ private:
 
   void refresh();
 };
+
+class MonitoringMode : public AbstractControl {
+  Q_OBJECT
+
+public:
+  MonitoringMode();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+
+  void refresh();
+};
+
+class MonitorEyesThreshold : public AbstractControl {
+  Q_OBJECT
+
+public:
+  MonitorEyesThreshold();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+
+  void refresh();
+};
