@@ -271,11 +271,16 @@ void CANParser::UpdateValid(uint64_t sec) {
   for (const auto& kv : message_states) {
     const auto& state = kv.second;
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
+      char save_error[128];
       if (state.seen > 0) {
-        DEBUG_CAN("CAN ADDRESS: 0x%X TIMEOUT\n", state.address);
+        DEBUG_CAN("CAN ADDRESS: %d TIMEOUT\n", state.address);
+        snprintf(save_error, sizeof(save_error), "touch /data/community/crashes/CAN_Address_%d_is_timeout.txt &", state.address);
+        system(save_error);
       } else {
-	    DEBUG_CAN("CAN ADDRESS: 0x%X MISSING\n", state.address);
-	  }
+	      DEBUG_CAN("CAN ADDRESS: %d MISSING\n", state.address);
+        snprintf(save_error, sizeof(save_error), "touch /data/community/crashes/CAN_Address_%d_is_missing.txt &", state.address);
+        system(save_error);
+	    }
       can_valid = false;
     }
   }
