@@ -9,8 +9,9 @@
 
 #include "common.h"
 
-// #define DEBUG(...)
-#define DEBUG printf
+#define DEBUG(...)
+// #define DEBUG printf
+#define DEBUG_CAN printf
 #define INFO printf
 
 bool MessageState::parse(uint64_t sec, uint16_t ts_, uint8_t * dat) {
@@ -271,9 +272,9 @@ void CANParser::UpdateValid(uint64_t sec) {
     const auto& state = kv.second;
     if (state.check_threshold > 0 && (sec - state.seen) > state.check_threshold) {
       if (state.seen > 0) {
-        DEBUG("CAN ADDRESS: 0x%X TIMEOUT\n", state.address);
+        DEBUG_CAN("CAN ADDRESS: 0x%X TIMEOUT\n", state.address);
       } else {
-	    DEBUG("CAN ADDRESS: 0x%X MISSING\n", state.address);
+	    DEBUG_CAN("CAN ADDRESS: 0x%X MISSING\n", state.address);
 	  }
       can_valid = false;
     }
