@@ -1245,12 +1245,6 @@ void ui_draw(UIState *s) {
     ui_print(s, s->viz_rect.centerX(), 100, "faceProb:  %.2f%%", s->scene.driver_state.getFaceProb()*100);
     ui_print(s, s->viz_rect.centerX(), 150, "partialFace:  %.2f%%", s->scene.driver_state.getPartialFace()*100);
 
-    char faceOrient1[16]; 
-    snprintf(faceOrient1, sizeof(faceOrient1), "%.4f", (s->scene.driver_state.getFaceOrientation()[0]));
-    // snprintf(faceOrient2, sizeof(faceOrient2), "%.4f", (s->scene.driver_state.getFaceOrientation()[1]));
-    // snprintf(faceOrient3, sizeof(faceOrient3), "%.4f", (s->scene.driver_state.getFaceOrientation()[2]));
-    ui_draw_text(s, s->viz_rect.centerX(), 200, faceOrient1, 60, COLOR_RED, "sans-bold");
-    // ui_print(s, s->viz_rect.centerX(), 200, "faceOrientation:  %s,  %s,  %s", faceOrient1, faceOrient2, faceOrient3);
     //// ui_print(s, s->viz_rect.centerX(), 200, "facePositionStd:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFacePositionStd()[0], s->scene.driver_state.getFacePositionStd()[1], s->scene.driver_state.getFacePositionStd()[2]);
     //// ui_print(s, s->viz_rect.centerX(), 250, "facePosition:  %.4f,  %.4f", s->scene.driver_state.getFacePosition()[0], s->scene.driver_state.getFacePosition()[1]);
     // ui_print(s, s->viz_rect.centerX(), 250, "driverOffsetPitch:  %.4f", s->scene.dmonitoring_state.getPosePitchOffset());
@@ -1261,9 +1255,9 @@ void ui_draw(UIState *s) {
     nvgFillColor(s->vg, COLOR_OCHRE_ALPHA(200));
     ui_print(s, s->viz_rect.centerX(), 350, "blinksProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftBlinkProb()*100, s->scene.driver_state.getRightBlinkProb()*100);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
-    ui_print(s, s->viz_rect.centerX(), 400, "poorVision:  %.2f%%", s->scene.driver_state.getPoorVision()*100);
-    ui_print(s, s->viz_rect.centerX(), 450, "distractedPose:  %.2f%%", s->scene.driver_state.getDistractedPose()*100);
-    ui_print(s, s->viz_rect.centerX(), 500, "distractedEyes:  %.2f%%", s->scene.driver_state.getDistractedEyes()*100);
+    ui_print(s, s->viz_rect.centerX(), 450, "poorVision:  %.2f%%", s->scene.driver_state.getPoorVision()*100);
+    ui_print(s, s->viz_rect.centerX(), 500, "distractedPose:  %.2f%%", s->scene.driver_state.getDistractedPose()*100);
+    ui_print(s, s->viz_rect.centerX(), 550, "distractedEyes:  %.2f%%", s->scene.driver_state.getDistractedEyes()*100);
     // nvgFillColor(s->vg, COLOR_RED_ALPHA(200));
     // ui_print(s, s->viz_rect.centerX(), 550, "isDistracted:  %.2f", s->scene.dmonitoring_state.getIsDistracted());
     // nvgFillColor(s->vg, COLOR_ORANGE_ALPHA(200));
