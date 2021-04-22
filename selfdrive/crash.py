@@ -42,7 +42,7 @@ else:
 
 
   def save_exception(exc_text):
-    log_file = '{}/{}'.format(CRASHES_DIR, datetime.now().strftime('%d-%m-%Y--%I:%M.%S-%p.log'))
+    log_file = '{}/{}'.format(CRASHES_DIR, datetime.now().strftime('%Y-%m-%d_%I:%M:%S_%p.txt'))
     with open(log_file, 'w') as f:
       f.write(exc_text)
     print('Logged current crash to {}'.format(log_file))
