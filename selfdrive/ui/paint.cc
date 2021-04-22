@@ -1236,11 +1236,35 @@ void ui_draw(UIState *s) {
     ui_draw_text(s, s->viz_rect.centerX(), s->viz_rect.centerY(), "카메라 구동중... 잠시 기다려주세요", 40 * 2.5, COLOR_WHITE, "sans-bold");
   }
 
+  // opkr
   if (s->scene.driver_view && s->vipc_client == s->vipc_client_front) {
-    char faceProb[32];
-    nvgTextAlign(s->vg, NVG_ALIGN_BASELINE);
-    snprintf(faceProb, sizeof(faceProb), "%.2f%%", s->scene.driver_state.getFaceProb()*100);
-    ui_draw_text(s, s->viz_rect.centerX(), 50, faceProb, 50, COLOR_WHITE, "sans-semibold");
+    nvgFontSize(s->vg, 50);
+    nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_BASELINE);
+    
+    nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 50, "faceProb:  %.2f%%", s->scene.driver_state.getFaceProb()*100);
+    ui_print(s, s->viz_rect.centerX(), 100, "partialFace:  %.2f%%", s->scene.driver_state.getPartialFace()*100);
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 150, "faceOrientation:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFaceOrientation()[0], s->scene.driver_state.getFaceOrientation()[1], s->scene.driver_state.getFaceOrientation()[2]);
+    ui_print(s, s->viz_rect.centerX(), 200, "facePositionStd:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFacePositionStd()[0], s->scene.driver_state.getFacePositionStd()[1], s->scene.driver_state.getFacePositionStd()[2]);
+    ui_print(s, s->viz_rect.centerX(), 250, "facePosition:  %.4f,  %.4f", s->scene.driver_state.getFacePosition()[0], s->scene.driver_state.getFacePosition()[1]);
+    ui_print(s, s->viz_rect.centerX(), 300, "driverOffsetPitch:  %.4f", s->scene.dmonitoring_state.getPosePitchOffset());
+    ui_print(s, s->viz_rect.centerX(), 350, "driverOffsetYaw:  %.4f", s->scene.dmonitoring_state.getPoseYawOffset());
+    nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 400, "sunglassesProb:  %.2f%%", s->scene.driver_state.getSunglassesProb()*100);
+    ui_print(s, s->viz_rect.centerX(), 450, "eyesProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftEyeProb()*100, s->scene.driver_state.getRightEyeProb()*100);
+    nvgFillColor(s->vg, COLOR_OCHRE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 500, "blinksProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftBlinkProb()*100, s->scene.driver_state.getRightBlinkProb()*100);
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 550, "poorVision:  %.2f%%", s->scene.driver_state.getPoorVision()*100);
+    ui_print(s, s->viz_rect.centerX(), 600, "distractedPose:  %.2f%%", s->scene.driver_state.getDistractedPose()*100);
+    ui_print(s, s->viz_rect.centerX(), 650, "distractedEyes:  %.2f%%", s->scene.driver_state.getDistractedEyes()*100);
+    nvgFillColor(s->vg, COLOR_RED_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 700, "isDistracted:  %.2f", s->scene.dmonitoring_state.getIsDistracted());
+    nvgFillColor(s->vg, COLOR_ORANGE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 750, "awarenessStatus:  %.2f", s->scene.dmonitoring_state.getAwarenessStatus());
+    //ui_print(s, s->viz_rect.centerX(), 800, "alertText:  %s", s->scene.alert_text1.c_str());
+    ui_draw_text(s, s->viz_rect.centerX(), 800, s->scene.alert_text1.c_str(), 50, COLOR_GREEN_ALPHA(200), "sans-semibold");
   }
 
   nvgEndFrame(s->vg);
