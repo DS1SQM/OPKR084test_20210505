@@ -1244,12 +1244,12 @@ void ui_draw(UIState *s) {
     nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
     ui_print(s, s->viz_rect.centerX(), 50, "faceProb:  %.2f%%", s->scene.driver_state.getFaceProb()*100);
     ui_print(s, s->viz_rect.centerX(), 100, "partialFace:  %.2f%%", s->scene.driver_state.getPartialFace()*100);
-    // nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
-    // ui_print(s, s->viz_rect.centerX(), 150, "faceOrientation:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFaceOrientation()[0], s->scene.driver_state.getFaceOrientation()[1], s->scene.driver_state.getFaceOrientation()[2]);
-    // ui_print(s, s->viz_rect.centerX(), 200, "facePositionStd:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFacePositionStd()[0], s->scene.driver_state.getFacePositionStd()[1], s->scene.driver_state.getFacePositionStd()[2]);
-    // ui_print(s, s->viz_rect.centerX(), 250, "facePosition:  %.4f,  %.4f", s->scene.driver_state.getFacePosition()[0], s->scene.driver_state.getFacePosition()[1]);
-    // ui_print(s, s->viz_rect.centerX(), 300, "driverOffsetPitch:  %.4f", s->scene.dmonitoring_state.getPosePitchOffset());
-    // ui_print(s, s->viz_rect.centerX(), 350, "driverOffsetYaw:  %.4f", s->scene.dmonitoring_state.getPoseYawOffset());
+    nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 150, "faceOrientation:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFaceOrientation()[0], s->scene.driver_state.getFaceOrientation()[1], s->scene.driver_state.getFaceOrientation()[2]);
+    ui_print(s, s->viz_rect.centerX(), 200, "facePositionStd:  %.4f,  %.4f,  %.4f", s->scene.driver_state.getFacePositionStd()[0], s->scene.driver_state.getFacePositionStd()[1], s->scene.driver_state.getFacePositionStd()[2]);
+    ui_print(s, s->viz_rect.centerX(), 250, "facePosition:  %.4f,  %.4f", s->scene.driver_state.getFacePosition()[0], s->scene.driver_state.getFacePosition()[1]);
+    ui_print(s, s->viz_rect.centerX(), 300, "driverOffsetPitch:  %.4f", s->scene.dmonitoring_state.getPosePitchOffset());
+    ui_print(s, s->viz_rect.centerX(), 350, "driverOffsetYaw:  %.4f", s->scene.dmonitoring_state.getPoseYawOffset());
     // nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
     // ui_print(s, s->viz_rect.centerX(), 400, "sunglassesProb:  %.2f%%", s->scene.driver_state.getSunglassesProb()*100);
     // ui_print(s, s->viz_rect.centerX(), 450, "eyesProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftEyeProb()*100, s->scene.driver_state.getRightEyeProb()*100);
