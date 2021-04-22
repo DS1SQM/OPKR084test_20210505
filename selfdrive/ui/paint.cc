@@ -1250,11 +1250,11 @@ void ui_draw(UIState *s) {
     // ui_print(s, s->viz_rect.centerX(), 250, "facePosition:  %.4f,  %.4f", s->scene.driver_state.getFacePosition()[0], s->scene.driver_state.getFacePosition()[1]);
     ui_print(s, s->viz_rect.centerX(), 300, "driverOffsetPitch:  %.4f", s->scene.dmonitoring_state.getPosePitchOffset());
     ui_print(s, s->viz_rect.centerX(), 350, "driverOffsetYaw:  %.4f", s->scene.dmonitoring_state.getPoseYawOffset());
-    // nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
-    // ui_print(s, s->viz_rect.centerX(), 400, "sunglassesProb:  %.2f%%", s->scene.driver_state.getSunglassesProb()*100);
-    // ui_print(s, s->viz_rect.centerX(), 450, "eyesProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftEyeProb()*100, s->scene.driver_state.getRightEyeProb()*100);
-    // nvgFillColor(s->vg, COLOR_OCHRE_ALPHA(200));
-    // ui_print(s, s->viz_rect.centerX(), 500, "blinksProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftBlinkProb()*100, s->scene.driver_state.getRightBlinkProb()*100);
+    nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 400, "sunglassesProb:  %.2f%%", s->scene.driver_state.getSunglassesProb()*100);
+    ui_print(s, s->viz_rect.centerX(), 450, "eyesProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftEyeProb()*100, s->scene.driver_state.getRightEyeProb()*100);
+    nvgFillColor(s->vg, COLOR_OCHRE_ALPHA(200));
+    ui_print(s, s->viz_rect.centerX(), 500, "blinksProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftBlinkProb()*100, s->scene.driver_state.getRightBlinkProb()*100);
     // nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     // ui_print(s, s->viz_rect.centerX(), 550, "poorVision:  %.2f%%", s->scene.driver_state.getPoorVision()*100);
     // ui_print(s, s->viz_rect.centerX(), 600, "distractedPose:  %.2f%%", s->scene.driver_state.getDistractedPose()*100);
