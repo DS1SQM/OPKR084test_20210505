@@ -1237,9 +1237,10 @@ void ui_draw(UIState *s) {
   }
 
   if (s->scene.driver_view && s->vipc_client == s->vipc_client_front) {
-    char faceProb[16];
+    char faceProb[32];
     nvgTextAlign(s->vg, NVG_ALIGN_BASELINE);
-    ui_draw_text(s, s->viz_rect.centerX(), 50, snprintf(faceProb, sizeof(faceProb), "faceProb: %.2f\%", s->scene.driver_state.getFaceProb()*100), 40, COLOR_WHITE, "sans-regular");
+    snprintf(faceProb, sizeof(faceProb), "%.2f%%", s->scene.driver_state.getFaceProb()*100);
+    ui_draw_text(s, s->viz_rect.centerX(), 50, faceProb, 50, COLOR_WHITE, "sans-semibold");
   }
 
   nvgEndFrame(s->vg);
