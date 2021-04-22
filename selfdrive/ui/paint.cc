@@ -1237,7 +1237,7 @@ void ui_draw(UIState *s) {
   }
 
   // opkr
-  if (s->scene.driver_view && s->vipc_client == s->vipc_client_front) {
+  if (s->scene.driver_view && s->vipc_client->connected && s->vipc_client == s->vipc_client_front) {
     nvgFontSize(s->vg, 48);
     nvgTextAlign(s->vg, NVG_ALIGN_LEFT | NVG_ALIGN_BASELINE);
     
@@ -1252,7 +1252,7 @@ void ui_draw(UIState *s) {
     nvgFillColor(s->vg, COLOR_GREEN_ALPHA(200));
     ui_print(s, s->viz_rect.centerX(), 250, "sunglassesProb:  %.2f%%", s->scene.driver_state.getSunglassesProb()*100);
     ui_print(s, s->viz_rect.centerX(), 300, "eyesProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftEyeProb()*100, s->scene.driver_state.getRightEyeProb()*100);
-    nvgFillColor(s->vg, COLOR_OCHRE_ALPHA(200));
+    nvgFillColor(s->vg, COLOR_ORANGE_ALPHA(200));
     ui_print(s, s->viz_rect.centerX(), 350, "blinksProb:  %.2f%%,  %.2f%%", s->scene.driver_state.getLeftBlinkProb()*100, s->scene.driver_state.getRightBlinkProb()*100);
     nvgFillColor(s->vg, COLOR_WHITE_ALPHA(200));
     ui_print(s, s->viz_rect.centerX(), 450, "poorVision:  %.2f%%", s->scene.driver_state.getPoorVision()*100);
