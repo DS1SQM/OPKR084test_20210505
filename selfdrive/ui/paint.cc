@@ -1235,6 +1235,13 @@ void ui_draw(UIState *s) {
     nvgTextAlign(s->vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
     ui_draw_text(s, s->viz_rect.centerX(), s->viz_rect.centerY(), "카메라 구동중... 잠시 기다려주세요", 40 * 2.5, COLOR_WHITE, "sans-bold");
   }
+
+  if (s->scene.driver_view && s->vipc_client == s->vipc_client_front) {
+    char faceProb[16];
+    nvgTextAlign(s->vg, NVG_ALIGN_BASELINE);
+    ui_draw_text(s, s->viz_rect.centerX(), 50, snprintf(faceProb, sizeof(faceProb), "faceProb: %.2f\%", s->scene.driver_state.getFaceProb()*100), 40, COLOR_WHITE, "sans-regular");
+  }
+
   nvgEndFrame(s->vg);
   glDisable(GL_BLEND);
 }
