@@ -854,7 +854,7 @@ void MonitoringMode::refresh() {
   btnplus.setText("▶");
 }
 
-MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("EYEMonitor Threshold", "눈 깜빡임 정도에 대한 기준값을 조정합니다. 낮출수록 더 엄격하게 적용하여 일찍 경고를 보냅니다.", "../assets/offroad/icon_shell.png") {
+MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("E2E EYE Threshold", "눈감지 범위에 대한 기준값을 조정합니다. 자신에게 맞는 값을 기준값을 설정합니다. 눈을 감고 있을 때 distratedEyes값 보다 낮게 설정해야 합니다. 기본값:0.75", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -911,6 +911,136 @@ MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("EYEMonitor Thres
 
 void MonitorEyesThreshold::refresh() {
   auto strs = QString::fromStdString(Params().get("OpkrMonitorEyesThreshold"));
+  int valuei = strs.toInt();
+  float valuef = valuei * 0.01;
+  QString valuefs = QString::number(valuef);
+  label.setText(QString::fromStdString(valuefs.toStdString()));
+  btnminus.setText("－");
+  btnplus.setText("＋");
+}
+
+NormalEyesThreshold::NormalEyesThreshold() : AbstractControl("Normal EYE Threshold", "눈 인식 기준값을 조정합니다. 인식률이 낮은경우 값을 낮춥니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorNormalEyesThreshold"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 1 ) {
+      value = 1;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorNormalEyesThreshold", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorNormalEyesThreshold"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 100 ) {
+      value = 100;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorNormalEyesThreshold", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void NormalEyesThreshold::refresh() {
+  auto strs = QString::fromStdString(Params().get("OpkrMonitorNormalEyesThreshold"));
+  int valuei = strs.toInt();
+  float valuef = valuei * 0.01;
+  QString valuefs = QString::number(valuef);
+  label.setText(QString::fromStdString(valuefs.toStdString()));
+  btnminus.setText("－");
+  btnplus.setText("＋");
+}
+
+BlinkThreshold::BlinkThreshold() : AbstractControl("Blink Threshold", "눈 깜빡임 정도에 대한 인식값을 조정합니다. 눈을 감고있을 때 BlinkProb를 확인후 값을 낮춰야 합니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+
+  label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+  label.setStyleSheet("color: #e0e879");
+  hlayout->addWidget(&label);
+
+  btnminus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnplus.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnminus.setFixedSize(150, 100);
+  btnplus.setFixedSize(150, 100);
+  hlayout->addWidget(&btnminus);
+  hlayout->addWidget(&btnplus);
+
+  QObject::connect(&btnminus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorBlinkThreshold"));
+    int value = str.toInt();
+    value = value - 1;
+    if (value <= 1 ) {
+      value = 1;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorBlinkThreshold", values.toStdString());
+    refresh();
+  });
+  
+  QObject::connect(&btnplus, &QPushButton::released, [=]() {
+    auto str = QString::fromStdString(Params().get("OpkrMonitorBlinkThreshold"));
+    int value = str.toInt();
+    value = value + 1;
+    if (value >= 100 ) {
+      value = 100;
+    } else {
+    }
+    QString values = QString::number(value);
+    Params().put("OpkrMonitorBlinkThreshold", values.toStdString());
+    refresh();
+  });
+  refresh();
+}
+
+void BlinkThreshold::refresh() {
+  auto strs = QString::fromStdString(Params().get("OpkrMonitorBlinkThreshold"));
   int valuei = strs.toInt();
   float valuef = valuei * 0.01;
   QString valuefs = QString::number(valuef);

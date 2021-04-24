@@ -1179,3 +1179,31 @@ private:
 
   void refresh();
 };
+
+class NormalEyesThreshold : public AbstractControl {
+  Q_OBJECT
+
+public:
+  NormalEyesThreshold();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+
+  void refresh();
+};
+
+class BlinkThreshold : public AbstractControl {
+  Q_OBJECT
+
+public:
+  BlinkThreshold();
+
+private:
+  QPushButton btnplus;
+  QPushButton btnminus;
+  QLabel label;
+
+  void refresh();
+};

@@ -75,3 +75,5 @@ AutoResOption:0
 SteerWindDown:0
 OpkrMonitoringMode:0
 OpkrMonitorEyesThreshold:75
+OpkrMonitorNormalEyesThreshold:50
+OpkrMonitorBlinkThreshold:50

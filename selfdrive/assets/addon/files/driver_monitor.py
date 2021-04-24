@@ -11,6 +11,8 @@ from common.params import Params
 EnableLogger = Params().get_bool("OpkrEnableLogger")
 EnableDriverMonitoring = Params().get_bool("OpkrEnableDriverMonitoring")
 MonitorEyesThreshold = int(Params().get("OpkrMonitorEyesThreshold")) * 0.01
+NormalEyesThreshold = int(Params().get("OpkrMonitorNormalEyesThreshold")) * 0.01
+BlinkThreshold = int(Params().get("OpkrMonitorBlinkThreshold")) * 0.01
 EventName = car.CarEvent.EventName
 
 # ******************************************************************************************
@@ -37,9 +39,9 @@ if not EnableLogger:
 else:
   _FACE_THRESHOLD = 0.6
 _PARTIAL_FACE_THRESHOLD = 0.6
-_EYE_THRESHOLD = 0.5
+_EYE_THRESHOLD = NormalEyesThreshold # 0.5
 _SG_THRESHOLD = 0.5
-_BLINK_THRESHOLD = 0.5
+_BLINK_THRESHOLD = BlinkThreshold # 0.5
 _BLINK_THRESHOLD_SLACK = 0.65
 _BLINK_THRESHOLD_STRICT = 0.5
 _PITCH_WEIGHT = 1.35  # pitch matters a lot more

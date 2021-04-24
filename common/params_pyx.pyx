@@ -173,6 +173,8 @@ keys = {
   b"SteerWindDown": [TxType.PERSISTENT],
   b"OpkrMonitoringMode": [TxType.PERSISTENT],
   b"OpkrMonitorEyesThreshold": [TxType.PERSISTENT],
+  b"OpkrMonitorNormalEyesThreshold": [TxType.PERSISTENT],
+  b"OpkrMonitorBlinkThreshold": [TxType.PERSISTENT],
 }
 
 def ensure_bytes(v):

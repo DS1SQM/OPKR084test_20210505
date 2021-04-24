@@ -120,6 +120,8 @@ def manager_init():
     ("SteerWindDown", "0"),
     ("OpkrMonitoringMode", "0"),
     ("OpkrMonitorEyesThreshold", "75"),
+    ("OpkrMonitorNormalEyesThreshold", "50"),
+    ("OpkrMonitorBlinkThreshold", "50"),
   ]
 
   if params.get_bool("RecordFrontLock"):
