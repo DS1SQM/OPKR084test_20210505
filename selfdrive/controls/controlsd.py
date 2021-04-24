@@ -345,10 +345,7 @@ class Controls:
           self.v_cruise_kph = int(CS.vSetDis)
         self.v_cruise_kph_last = self.v_cruise_kph
       elif CS.cruiseButtons == Buttons.RES_ACCEL or CS.cruiseButtons == Buttons.SET_DECEL:
-        if Params().get_bool('CruiseAutoRes') and int(Params().get("AutoResOption")) == 1:
-          self.v_cruise_kph = round(CS.vEgo*CV.MS_TO_KPH*1.1)
-        else:
-          self.v_cruise_kph = round(CS.cruiseState.speed * CV.MS_TO_KPH)
+        self.v_cruise_kph = round(CS.cruiseState.speed * CV.MS_TO_KPH)
         self.v_cruise_kph_last = self.v_cruise_kph
       elif CS.driverAcc and Params().get_bool('OpkrVariableCruise') and Params().get_bool('CruiseOverMaxSpeed') and 30 <= self.v_cruise_kph < int(round(CS.vEgo*CV.MS_TO_KPH)):
         self.v_cruise_kph = int(round(CS.vEgo*CV.MS_TO_KPH))

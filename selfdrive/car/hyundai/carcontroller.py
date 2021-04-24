@@ -158,6 +158,8 @@ class CarController():
     self.auto_res_timer = 0
     self.res_speed = 0
     self.res_speed_timer = 0
+    self.decel_sw_push = False
+    self.decel_sw_timer = 0
 
     self.lkas_button_on = True
     self.longcontrol = CP.openpilotLongitudinalControl
@@ -510,11 +512,19 @@ class CarController():
         self.res_speed_timer = 350
       elif self.opkr_cruise_auto_res_option == 1:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))  # auto res but set_decel to set current speed
+        self.decel_sw_push = True
       if self.auto_res_timer <= 0:
         self.auto_res_timer = randint(10, 15)
     elif self.auto_res_timer > 0 and self.opkr_cruise_auto_res:
       self.auto_res_timer -= 1
-    
+    if self.decel_sw_push and int(self.vCruiseSet) > int(CS.VSetDis) and CS.acc_active and self.decel_sw_timer <= 0:
+      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))
+      self.decel_sw_timer = randint(10, 15)
+    elif self.decel_sw_timer > 0 and self.decel_sw_push:
+      self.decel_sw_timer -= 1
+    elif CS.acc_active and self.decel_sw_push == True:
+      self.decel_sw_push = False
+
     if CS.out.brakeLights and CS.out.vEgo == 0 and not CS.acc_active:
       self.standstill_status_timer += 1
       if self.standstill_status_timer > 200:
