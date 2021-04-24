@@ -139,15 +139,19 @@ class DriverStatus():
     self.threshold_prompt = _DISTRACTED_PROMPT_TIME_TILL_TERMINAL / _DISTRACTED_TIME
 
     self.monitoring_mode = 0
-    self.monitoring_mode2 = 0
-    self.monitoring_mode3 = 0
 
     self._set_timers(active_monitoring=True)
 
   def _set_timers(self, active_monitoring):
+    self.monitoring_mode = int(Params().get("OpkrMonitoringMode"))
+    if self.monitoring_mode == 1:
+      self.threshold_prompt = 7. / 9.
     if self.active_monitoring_mode and self.awareness <= self.threshold_prompt:
       if active_monitoring:
-        self.step_change = DT_DMON / _DISTRACTED_TIME
+        if self.monitoring_mode == 1:
+          self.step_change = DT_DMON / 9.
+        else:
+          self.step_change = DT_DMON / _DISTRACTED_TIME
       else:
         self.step_change = 0.
       return  # no exploit after orange alert
@@ -160,10 +164,16 @@ class DriverStatus():
         self.awareness_passive = self.awareness
         self.awareness = self.awareness_active
 
-      self.threshold_pre = _DISTRACTED_PRE_TIME_TILL_TERMINAL / _DISTRACTED_TIME
-      self.threshold_prompt = _DISTRACTED_PROMPT_TIME_TILL_TERMINAL / _DISTRACTED_TIME
-      self.step_change = DT_DMON / _DISTRACTED_TIME
+      if self.monitoring_mode == 1:
+        self.threshold_pre = _DISTRACTED_PRE_TIME_TILL_TERMINAL / 9.
+        self.threshold_prompt = 7. / 9.
+        self.step_change = DT_DMON / 9.
+      else:
+        self.threshold_pre = _DISTRACTED_PRE_TIME_TILL_TERMINAL / _DISTRACTED_TIME
+        self.threshold_prompt = _DISTRACTED_PROMPT_TIME_TILL_TERMINAL / _DISTRACTED_TIME
+        self.step_change = DT_DMON / _DISTRACTED_TIME
       self.active_monitoring_mode = True
+
     else:
       if self.active_monitoring_mode:
         self.awareness_active = self.awareness
@@ -175,7 +185,7 @@ class DriverStatus():
       self.active_monitoring_mode = False
 
   def _is_driver_distracted(self, pose, blink):
-    self.monitoring_mode2 = int(Params().get("OpkrMonitoringMode"))
+    self.monitoring_mode = int(Params().get("OpkrMonitoringMode"))
     if not self.pose_calibrated:
       pitch_error = pose.pitch - _PITCH_NATURAL_OFFSET
       yaw_error = pose.yaw - _YAW_NATURAL_OFFSET
@@ -189,29 +199,29 @@ class DriverStatus():
     pitch_error *= _PITCH_WEIGHT
     pose_metric = sqrt(yaw_error**2 + pitch_error**2)
 
-    if self.monitoring_mode2 == 0:
-      if pose_metric > _METRIC_THRESHOLD*pose.cfactor:
-        return DistractedType.BAD_POSE
-      elif (blink.left_blink + blink.right_blink)*0.5 > _BLINK_THRESHOLD*blink.cfactor:
-        return DistractedType.BAD_BLINK
-      else:
-        return DistractedType.NOT_DISTRACTED
-    elif self.monitoring_mode2 == 1:
+    if self.monitoring_mode == 1:
       if pose_metric > _METRIC_THRESHOLD*pose.cfactor:
         return DistractedType.BAD_POSE
       elif (blink.left_blink + blink.right_blink)*0.5 > BlinkThreshold*blink.cfactor:
         return DistractedType.BAD_BLINK
       else:
         return DistractedType.NOT_DISTRACTED
+    else:
+      if pose_metric > _METRIC_THRESHOLD*pose.cfactor:
+        return DistractedType.BAD_POSE
+      elif (blink.left_blink + blink.right_blink)*0.5 > _BLINK_THRESHOLD*blink.cfactor:
+        return DistractedType.BAD_BLINK
+      else:
+        return DistractedType.NOT_DISTRACTED
 
   def set_policy(self, model_data):
-    self.monitoring_mode3 = int(Params().get("OpkrMonitoringMode"))
+    self.monitoring_mode = int(Params().get("OpkrMonitoringMode"))
     ep = min(model_data.meta.engagedProb, 0.8) / 0.8
     self.pose.cfactor = interp(ep, [0, 0.5, 1], [_METRIC_THRESHOLD_STRICT, _METRIC_THRESHOLD, _METRIC_THRESHOLD_SLACK])/_METRIC_THRESHOLD
-    if self.monitoring_mode3 == 0:
+    if self.monitoring_mode == 1:
+      self.blink.cfactor = interp(ep, [0, 0.5, 1], [BlinkThreshold, BlinkThreshold, min(1.0, BlinkThreshold+0.15)])/BlinkThreshold
+    else:
       self.blink.cfactor = interp(ep, [0, 0.5, 1], [_BLINK_THRESHOLD_STRICT, _BLINK_THRESHOLD, _BLINK_THRESHOLD_SLACK])/_BLINK_THRESHOLD
-    elif self.monitoring_mode3 == 1:
-      self.blink.cfactor = interp(ep, [0, 0.5, 1], [BlinkThreshold, BlinkThreshold, max(1.0, BlinkThreshold+0.15)])/BlinkThreshold
 
   def get_pose(self, driver_state, cal_rpy, car_speed, op_engaged):
     self.monitoring_mode = int(Params().get("OpkrMonitoringMode"))
@@ -228,19 +238,19 @@ class DriverStatus():
     model_std_max = max(self.pose.pitch_std, self.pose.yaw_std)
     self.pose.low_std = model_std_max < _POSESTD_THRESHOLD and not self.face_partial
 
-    if self.monitoring_mode == 0:
-      self.blink.left_blink = driver_state.leftBlinkProb * (driver_state.leftEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
-      self.blink.right_blink = driver_state.rightBlinkProb * (driver_state.rightEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
-      self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
-                                driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
-                               ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > _E2E_EYES_THRESHOLD) and
-                                (self.face_detected and not self.face_partial))
-    elif self.monitoring_mode == 1:
+    if self.monitoring_mode == 1:
       self.blink.left_blink = driver_state.leftBlinkProb * (driver_state.leftEyeProb > NormalEyesThreshold) * (driver_state.sunglassesProb < _SG_THRESHOLD)
       self.blink.right_blink = driver_state.rightBlinkProb * (driver_state.rightEyeProb > NormalEyesThreshold) * (driver_state.sunglassesProb < _SG_THRESHOLD)
       self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
                                 driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
                                ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > MonitorEyesThreshold) and
+                                (self.face_detected and not self.face_partial))
+    else:
+      self.blink.left_blink = driver_state.leftBlinkProb * (driver_state.leftEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
+      self.blink.right_blink = driver_state.rightBlinkProb * (driver_state.rightEyeProb > _EYE_THRESHOLD) * (driver_state.sunglassesProb < _SG_THRESHOLD)
+      self.driver_distracted = (self._is_driver_distracted(self.pose, self.blink) > 0 and
+                                driver_state.faceProb > _FACE_THRESHOLD and self.pose.low_std) or \
+                               ((driver_state.distractedPose > _E2E_POSE_THRESHOLD or driver_state.distractedEyes > _E2E_EYES_THRESHOLD) and
                                 (self.face_detected and not self.face_partial))
     self.driver_distraction_filter.update(self.driver_distracted)
 
