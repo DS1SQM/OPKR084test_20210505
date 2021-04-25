@@ -131,9 +131,9 @@ class CarState(CarStateBase):
     # TODO: Check this
     ret.brakeLights = bool(cp.vl["TCS13"]['BrakeLight'] or ret.brakePressed)
 
-    if self.CP.carFingerprint in FEATURES["use_elect_ems"]:
+    if self.CP.enableEms:
       ret.gas = cp.vl["E_EMS11"]['Accel_Pedal_Pos'] / 256.
-      ret.gasPressed = ret.gas > 5
+      ret.gasPressed = ret.gas > 0
     else:
       ret.gas = cp.vl["EMS12"]['PV_AV_CAN'] / 100
       ret.gasPressed = bool(cp.vl["EMS16"]["CF_Ems_AclAct"])
@@ -221,7 +221,7 @@ class CarState(CarStateBase):
         else:
           ret.gearShifter = GearShifter.unknown
 
-    if self.CP.carFingerprint in FEATURES["use_fca"]:
+    if self.CP.enableFca:
       ret.stockAeb = cp.vl["FCA11"]['FCA_CmdAct'] != 0
       ret.stockFcw = cp.vl["FCA11"]['CF_VSM_Warn'] == 2
     else:
@@ -229,9 +229,10 @@ class CarState(CarStateBase):
       ret.stockFcw = cp.vl["SCC12"]['CF_VSM_Warn'] == 2
 
     # Blind Spot Detection and Lane Change Assist signals
-    self.lca_state = cp.vl["LCA11"]["CF_Lca_Stat"]
-    ret.leftBlindspot = cp.vl["LCA11"]["CF_Lca_IndLeft"] != 0
-    ret.rightBlindspot = cp.vl["LCA11"]["CF_Lca_IndRight"] != 0
+    if self.CP.enableBsm:
+      self.lca_state = cp.vl["LCA11"]["CF_Lca_Stat"]
+      ret.leftBlindspot = cp.vl["LCA11"]["CF_Lca_IndLeft"] != 0
+      ret.rightBlindspot = cp.vl["LCA11"]["CF_Lca_IndRight"] != 0
 
     # save the entire LKAS11, CLU11, SCC12 and MDPS12
     self.lkas11 = copy.copy(cp_cam.vl["LKAS11"])
@@ -344,9 +345,6 @@ class CarState(CarStateBase):
 
       ("CF_Lvr_GearInf", "LVR11", 0),        # Transmission Gear (0 = N or P, 1-8 = Fwd, 14 = Rev)
 
-      ("CF_Lca_Stat", "LCA11", 0),
-      ("CF_Lca_IndLeft", "LCA11", 0),
-      ("CF_Lca_IndRight", "LCA11", 0),
 
       ("MainMode_ACC", "SCC11", 1),
       ("SCCInfoDisplay", "SCC11", 0),
@@ -413,11 +411,21 @@ class CarState(CarStateBase):
       ("CGW4", 5),
       ("WHL_SPD11", 50),
     ]
+
+    if CP.enableBsm:
+      signals += [
+        ("CF_Lca_Stat", "LCA11", 0),
+        ("CF_Lca_IndLeft", "LCA11", 0),
+        ("CF_Lca_IndRight", "LCA11", 0),
+      ]
+      checks += [("LCA11", 50)]
+
     if CP.sccBus == 0 and CP.enableCruise:
       checks += [
         ("SCC11", 50),
         ("SCC12", 50),
       ]
+
     if CP.mdpsBus == 0:
       signals += [
         ("CR_Mdps_StrColTq", "MDPS12", 0),
@@ -467,7 +475,7 @@ class CarState(CarStateBase):
       signals += [
         ("CF_Lvr_Gear","LVR12",0),
       ]
-    if CP.carFingerprint not in FEATURES["use_elect_ems"]:
+    if not CP.enableEms:
       signals += [
         ("PV_AV_CAN", "EMS12", 0),
         ("CF_Ems_AclAct", "EMS16", 0),
@@ -485,16 +493,16 @@ class CarState(CarStateBase):
         ("E_EMS11", 100),
       ]
 
-    if CP.carFingerprint in FEATURES["use_fca"]:
+    if CP.enableFca:
       signals += [
         ("FCA_CmdAct", "FCA11", 0),
         ("CF_VSM_Warn", "FCA11", 0),
       ]
-      if not CP.openpilotLongitudinalControl:
-        checks += [("FCA11", 50)]
+      checks += [("FCA11", 50)]
 
     if CP.carFingerprint in [CAR.SANTA_FE]:
       checks.remove(("TCS13", 50))
+
     if CP.spasEnabled:
       if CP.mdpsBus == 1:
         signals += [
@@ -634,7 +642,6 @@ class CarState(CarStateBase):
       ("CF_Lkas_HbaOpt", "LKAS11", 0),
       ("CF_Lkas_FcwSysState", "LKAS11", 0),
       ("CF_Lkas_FcwCollisionWarning", "LKAS11", 0),
-      ("CF_Lkas_MsgCount", "LKAS11", 0),
       ("CF_Lkas_FusionState", "LKAS11", 0),
       ("CF_Lkas_FcwOpt_USM", "LKAS11", 0),
       ("CF_Lkas_LdwsOpt_USM", "LKAS11", 0),

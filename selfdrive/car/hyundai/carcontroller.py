@@ -6,7 +6,7 @@ from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfahda_mfc, \
                                              create_scc11, create_scc12,  create_scc13, create_scc14, \
                                              create_mdps12, create_spas11, create_spas12, create_ems11
-from selfdrive.car.hyundai.values import Buttons, CarControllerParams, CAR, FEATURES
+from selfdrive.car.hyundai.values import Buttons, CarControllerParams, CAR
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 
@@ -54,11 +54,8 @@ def process_hud_alert(enabled, fingerprint, visual_alert, left_lane,
   sys_state = 1
   if not button_on:
     lane_visible = 0
-  if left_lane and right_lane or sys_warning:  #HUD alert only display when LKAS status is active
-    if enabled or sys_warning:
-      sys_state = 3
-    else:
-      sys_state = 4
+  if left_lane and right_lane or sys_warning:  # HUD alert only display when LKAS status is active
+    sys_state = 3 if enabled or sys_warning else 4
   elif left_lane:
     sys_state = 5
   elif right_lane:
@@ -67,12 +64,10 @@ def process_hud_alert(enabled, fingerprint, visual_alert, left_lane,
   # initialize to no warnings
   left_lane_warning = 0
   right_lane_warning = 0
-  #if left_lane_depart:
-  #  left_lane_warning = 1 if fingerprint in [CAR.GENESIS, CAR.GENESIS_G70, CAR.GENESIS_G80,
-  #                                           CAR.GENESIS_G90, CAR.GENESIS_G90_L] else 2
-  #if right_lane_depart:
-  #  right_lane_warning = 1 if fingerprint in [CAR.GENESIS, CAR.GENESIS_G70, CAR.GENESIS_G80,
-  #                                            CAR.GENESIS_G90, CAR.GENESIS_G90_L] else 2
+  if left_lane_depart:
+    left_lane_warning = 1 if fingerprint in [CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
+  if right_lane_depart:
+    right_lane_warning = 1 if fingerprint in [CAR.GENESIS_G90, CAR.GENESIS_G80] else 2
 
   return sys_warning, sys_state, left_lane_warning, right_lane_warning
 
@@ -86,7 +81,6 @@ class CarController():
     self.steer_rate_limited = False
     self.steer_wind_down = 0
     self.accel_steady = 0
-    self.lkas11_cnt = 0
     self.scc12_cnt = 0
 
     self.resume_cnt = 0
@@ -165,6 +159,8 @@ class CarController():
     self.accActive = False
 
     self.safety_camera_timer = 0
+    
+    self.enable_lfa = CP.enableLfa
 
     self.model_speed_range = [30, 100, 255]
     self.steerMax_range = [CarControllerParams.STEER_MAX, int(self.params.get("SteerMaxBaseAdj")), int(self.params.get("SteerMaxBaseAdj"))]
@@ -197,6 +193,7 @@ class CarController():
       self.spas_always = False
 
     self.p = CarControllerParams
+    #self.sm = messaging.SubMaster(['controlsState'])
   def update(self, enabled, CS, frame, CC, actuators, pcm_cancel_cmd, visual_alert,
              left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, sm):
 
@@ -343,7 +340,6 @@ class CarController():
     set_speed *= CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH
 
     if frame == 0: # initialize counts from last received count signals
-      self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
       self.scc12_cnt = CS.scc12["CR_VSM_Alive"] + 1 if not CS.no_radar else 0
 
       #TODO: fix this
@@ -362,18 +358,17 @@ class CarController():
 
     self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
 
-    self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
     self.scc12_cnt %= 0xF
 
     can_sends = []
     can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    self.steer_wind_down, CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
-                                   left_lane_warning, right_lane_warning, 0))
+                                   left_lane_warning, right_lane_warning, self.enable_lfa, 0))
 
     if CS.mdps_bus or CS.scc_bus == 1: # send lkas11 bus 1 if mdps or scc is on bus 1
       can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    self.steer_wind_down, CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
-                                   left_lane_warning, right_lane_warning, 1))
+                                   left_lane_warning, right_lane_warning, self.enable_lfa, 1))
     if frame % 2 and CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
       can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.NONE, enabled_speed, CS.mdps_bus))
 
@@ -546,7 +541,7 @@ class CarController():
       self.scc12_cnt += 1
 
     # 20 Hz LFA MFA message
-    if frame % 5 == 0 and self.car_fingerprint in FEATURES["send_lfahda_mfa"]:
+    if frame % 5 == 0 and self.enable_lfa:
       can_sends.append(create_lfahda_mfc(self.packer, frame, lkas_active))
 
     if CS.spas_enabled:

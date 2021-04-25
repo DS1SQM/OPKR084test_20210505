@@ -223,6 +223,10 @@ class CarInterface(CarInterfaceBase):
     ret.brakeMaxV = [1., 0.8]
 
     ret.enableCamera = True
+    ret.enableBsm = True if 1419 in fingerprint[0] else False
+    ret.enableFca = True if 909 in fingerprint[0] else False
+    ret.enableLfa = True if 1157 in fingerprint[0] else False
+    ret.enableEms = True if 608 and 809 in fingerprint[0] else False
 
     ret.stoppingControl = True
     ret.startAccel = 0.0
