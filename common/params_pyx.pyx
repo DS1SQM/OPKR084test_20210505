@@ -154,7 +154,6 @@ keys = {
   b"OpkrSSHLegacy": [TxType.PERSISTENT],
   b"ShaneFeedForward": [TxType.PERSISTENT],
   b"CruiseOverMaxSpeed": [TxType.PERSISTENT],
-  b"OpkrMapDecelOnly": [TxType.PERSISTENT],
   b"JustDoGearD": [TxType.PERSISTENT],
   b"LanelessMode": [TxType.PERSISTENT],
   b"ComIssueGone": [TxType.PERSISTENT],

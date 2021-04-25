@@ -1116,7 +1116,7 @@ void VariableCruiseProfile::refresh() {
   btnplus.setText("▶");
 }
 
-CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("크루즈 시작모드 설정", "크루즈 시작모드를 설정합니다. 오파모드/차간+커브/차간Only/편도1차선", "../assets/offroad/icon_shell.png") {
+CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("크루즈 시작모드 설정", "크루즈 시작모드를 설정합니다. 오파모드/차간+커브/차간Only/편도1차선/맵감속Only  오파모드:버튼속도제어 사용안함, 차간+커브:버튼속도제어를 차간거리와 커브구간에서 사용, 차간Only:버튼감속을 차간거리에서만 사용, 편도1차선:편도1차선 구간에서 카메라오프셋을 낮춰 오른쪽으로 붙여서 주행, 맵감속Only:티맵감속만 사용", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1160,8 +1160,8 @@ CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("크루즈 시작모드
     auto str = QString::fromStdString(Params().get("CruiseStatemodeSelInit"));
     int value = str.toInt();
     value = value + 1;
-    if (value >= 3 ) {
-      value = 3;
+    if (value >= 4 ) {
+      value = 4;
     } else {
     }
     QString values = QString::number(value);
@@ -1179,8 +1179,10 @@ void CruisemodeSelInit::refresh() {
     label.setText(QString::fromStdString("차간+커브"));
   } else if (option == "2") {
     label.setText(QString::fromStdString("차간Only"));
-  } else {
+  } else if (option == "3") {
     label.setText(QString::fromStdString("편도1차선"));
+  } else {
+    label.setText(QString::fromStdString("맵감속Only"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");

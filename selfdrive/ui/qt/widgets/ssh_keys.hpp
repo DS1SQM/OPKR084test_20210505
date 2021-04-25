@@ -259,18 +259,6 @@ public:
   }
 };
 
-class MapDecelOnlyToggle : public ToggleControl {
-  Q_OBJECT
-
-public:
-  MapDecelOnlyToggle() : ToggleControl("가변크루즈 사용시 맵 감속만 사용", "가변크루즈 사용중 맵 감속기능만 사용합니다. 오파모드에서는 동작하지 않습니다.", "../assets/offroad/icon_shell.png", Params().getBool("OpkrMapDecelOnly")) {
-    QObject::connect(this, &MapDecelOnlyToggle::toggleFlipped, [=](int state) {
-      char value = state ? '1' : '0';
-      Params().put("OpkrMapDecelOnly", &value, 1);
-    });
-  }
-};
-
 class DebugUiOneToggle : public ToggleControl {
   Q_OBJECT
 

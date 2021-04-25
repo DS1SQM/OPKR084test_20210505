@@ -33,11 +33,12 @@ class Spdctrl(SpdController):
         self.target_speed_map_counter2 = 0
         self.hesitant_status = False
         self.hesitant_timer = 0
-        self.map_decel_only = Params().get_bool("OpkrMapDecelOnly")
+        self.map_decel_only = False
         self.map_spdlimit_offset = int(Params().get("OpkrSpeedLimitOffset"))
 
     def update_lead(self, sm, CS, dRel, yRel, vRel, CC):
 
+        self.map_decel_only = CS.out.cruiseState.modeSel == 4
         plan = sm['longitudinalPlan']
         dRele = plan.dRel1 #EON Lead
         yRele = plan.yRel1 #EON Lead
@@ -199,7 +200,7 @@ class Spdctrl(SpdController):
             elif 60 > CS.clu_Vanz > 30 and lead_objspd < -1 and (int(CS.clu_Vanz)-1) <= int(CS.VSetDis) and int(CS.clu_Vanz) >= dRel*0.85 and 1 < dRel < 149:
                 self.seq_step_debug = "SS>VS,60>v>30,-1"
                 lead_wait_cmd, lead_set_speed = self.get_tm_speed( CS, max(15, 150-(abs(lead_objspd**3))), -1)
-            elif 7 < int(CS.clu_Vanz) < 30 and lead_objspd <= 0 and CS.VSetDis > 30:
+            elif 7 < int(CS.clu_Vanz) < 30 and lead_objspd < 0 and CS.VSetDis > 30:
                 self.seq_step_debug = "SS>VS,30이하"
                 lead_wait_cmd, lead_set_speed = self.get_tm_speed( CS, 10, -5)
             elif lead_objspd == 0 and int(CS.clu_Vanz)+5 <= int(CS.VSetDis) and int(CS.clu_Vanz) > 40 and 1 < dRel < 149: # 앞차와 속도 같을 시 현재속도+5으로 크루즈설정속도 유지
@@ -276,6 +277,8 @@ class Spdctrl(SpdController):
             self.steer_mode = "차간ONLY"
         elif CS.out.cruiseState.modeSel == 3:
             self.steer_mode = "편도1차선"
+        elif CS.out.cruiseState.modeSel == 4:
+            self.steer_mode = "맵감속ONLY"
 
         if self.cruise_gap != CS.cruiseGapSet:
             self.cruise_gap = CS.cruiseGapSet

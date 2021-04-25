@@ -447,7 +447,6 @@ QWidget * user_panel(QWidget * parent) {
   layout->addWidget(new TurnSteeringDisableToggle());
   layout->addWidget(new CruiseOverMaxSpeedToggle());
   layout->addWidget(new SpeedLimitOffset());
-  layout->addWidget(new MapDecelOnlyToggle());
   layout->addWidget(new CruiseGapAdjustToggle());
   layout->addWidget(new AutoEnabledToggle());
   layout->addWidget(new CruiseAutoResToggle());

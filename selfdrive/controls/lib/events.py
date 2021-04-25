@@ -538,6 +538,13 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimeModeOneway, 1., 0, 1.),
   },
+  EventName.modeChangeMaponly: {
+    ET.WARNING: Alert(
+      "맵감속ONLY 모드",
+      "",
+      AlertStatus.normal, AlertSize.small,
+      Priority.LOW, VisualAlert.none, AudibleAlert.chimeModeMaponly, 1., 0, 1.),
+  },
   EventName.needBrake: {
     ET.WARNING: Alert(
       "브레이크!",

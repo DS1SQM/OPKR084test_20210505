@@ -102,7 +102,6 @@ def manager_init():
     ("OpkrSSHLegacy", "1"),
     ("ShaneFeedForward", "0"),
     ("CruiseOverMaxSpeed", "0"),
-    ("OpkrMapDecelOnly", "0"),
     ("JustDoGearD", "0"),
     ("LanelessMode", "0"),
     ("ComIssueGone", "0"),

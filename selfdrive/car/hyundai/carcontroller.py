@@ -158,8 +158,6 @@ class CarController():
     self.auto_res_timer = 0
     self.res_speed = 0
     self.res_speed_timer = 0
-    self.decel_sw_push = False
-    self.decel_sw_timer = 0
 
     self.lkas_button_on = True
     self.longcontrol = CP.openpilotLongitudinalControl
@@ -393,7 +391,7 @@ class CarController():
       pass
     trace1.printf1('{}  {}'.format(str_log1, self.str_log2))
 
-    if CS.out.cruiseState.modeSel == 0 and self.mode_change_switch == 3:
+    if CS.out.cruiseState.modeSel == 0 and self.mode_change_switch == 4:
       self.mode_change_timer = 50
       self.mode_change_switch = 0
     elif CS.out.cruiseState.modeSel == 1 and self.mode_change_switch == 0:
@@ -405,10 +403,13 @@ class CarController():
     elif CS.out.cruiseState.modeSel == 3 and self.mode_change_switch == 2:
       self.mode_change_timer = 50
       self.mode_change_switch = 3
+    elif CS.out.cruiseState.modeSel == 4 and self.mode_change_switch == 3:
+      self.mode_change_timer = 50
+      self.mode_change_switch = 4
     if self.mode_change_timer > 0:
       self.mode_change_timer -= 1
 
-    run_speed_ctrl = self.opkr_variablecruise and CS.acc_active and (CS.out.cruiseState.modeSel == 1 or CS.out.cruiseState.modeSel == 2 or CS.out.cruiseState.modeSel == 3)
+    run_speed_ctrl = self.opkr_variablecruise and CS.acc_active and (CS.out.cruiseState.modeSel > 0)
     if not run_speed_ctrl:
       if CS.out.cruiseState.modeSel == 0:
         self.steer_mode = "오파모드"
@@ -418,6 +419,8 @@ class CarController():
         self.steer_mode = "차간ONLY"
       elif CS.out.cruiseState.modeSel == 3:
         self.steer_mode = "편도1차선"
+      elif CS.out.cruiseState.modeSel == 4:
+        self.steer_mode = "맵감속ONLY"
       if CS.out.steerWarning == 0:
         self.mdps_status = "정상"
       elif CS.out.steerWarning == 1:
@@ -512,18 +515,10 @@ class CarController():
         self.res_speed_timer = 350
       elif self.opkr_cruise_auto_res_option == 1:
         can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))  # auto res but set_decel to set current speed
-        self.decel_sw_push = True
       if self.auto_res_timer <= 0:
         self.auto_res_timer = randint(10, 15)
     elif self.auto_res_timer > 0 and self.opkr_cruise_auto_res:
       self.auto_res_timer -= 1
-    if self.decel_sw_push and int(self.vCruiseSet) > int(CS.VSetDis) and CS.acc_active and self.decel_sw_timer <= 0:
-      can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.SET_DECEL))
-      self.decel_sw_timer = randint(10, 15)
-    elif self.decel_sw_timer > 0 and self.decel_sw_push:
-      self.decel_sw_timer -= 1
-    elif CS.acc_active and self.decel_sw_push == True:
-      self.decel_sw_push = False
 
     if CS.out.brakeLights and CS.out.vEgo == 0 and not CS.acc_active:
       self.standstill_status_timer += 1

@@ -62,7 +62,6 @@ OpkrTurnSteeringDisable:0
 OpkrHotspotOnBoot:0
 ShaneFeedForward:0
 CruiseOverMaxSpeed:0
-OpkrMapDecelOnly:0
 JustDoGearD:0
 ComIssueGone:0
 SteerThreshold:150

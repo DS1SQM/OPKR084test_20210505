@@ -128,8 +128,9 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     modeChangeDistcurv @101;
     modeChangeDistance @102;
     modeChangeOneway @103;
-    needBrake @104;
-    standStill @105;
+    modeChangeMaponly @104;
+    needBrake @105;
+    standStill @106;
   }
 }
 
@@ -373,6 +374,7 @@ struct CarControl {
       chimeModeDistcurv @18;
       chimeModeDistance @19;
       chimeModeOneway @20;
+      chimeModeMaponly @21;
     }
   }
 
