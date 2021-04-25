@@ -457,7 +457,11 @@ struct CarParams {
   sasBus @56: Int8;
   sccBus @57: Int8;
   spasEnabled @58: Bool;
-  standStill @59: Bool;
+  enableBsm @59: Bool;
+  enableFca @60: Bool;
+  enableLfa @61: Bool;
+  enableEms @62: Bool;
+  standStill @63: Bool;
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
