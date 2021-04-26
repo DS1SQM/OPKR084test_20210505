@@ -593,6 +593,9 @@ FEATURES = {
   # Use E_GEAR Message for Gear Selection
   "use_elect_gears": {CAR.SONATA_HEV, CAR.SONATA19_HEV, CAR.KONA_EV, CAR.KONA_HEV, CAR.IONIQ_EV, CAR.IONIQ_HEV, CAR.GRANDEUR_HEV, CAR.NEXO,
                       CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV, CAR.SOUL_EV},
+  # Use E_EMS11 Message for Gas and Brake for Hybrid/ELectric
+  "use_elect_ems": {CAR.SONATA_HEV, CAR.SONATA19_HEV, CAR.KONA_EV, CAR.KONA_HEV, CAR.IONIQ_EV, CAR.IONIQ_HEV, CAR.GRANDEUR_HEV, CAR.NEXO,
+                    CAR.K5_HEV, CAR.K7_HEV, CAR.NIRO_EV, CAR.NIRO_HEV, CAR.SOUL_EV},
   "has_scc13": set([]),
   "has_scc14": set([]),
 }

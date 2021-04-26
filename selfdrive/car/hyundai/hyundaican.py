@@ -45,6 +45,9 @@ def create_lkas11(packer, frame, car_fingerprint, apply_steer, steer_req,
     # Genesis and Optima fault when forwarding while engaged
     values["CF_Lkas_LdwsActivemode"] = 2
 
+  elif car_fingerprint in [CAR.K5, CAR.K5_HEV, CAR.K7, CAR.K7_HEV]:
+    values["CF_Lkas_LdwsActivemode"] = 0
+
   if Params().get_bool("LdwsCarFix"):
   	values["CF_Lkas_LdwsOpt_USM"] = 3
 

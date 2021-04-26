@@ -131,7 +131,7 @@ class CarState(CarStateBase):
     # TODO: Check this
     ret.brakeLights = bool(cp.vl["TCS13"]['BrakeLight'] or ret.brakePressed)
 
-    if self.CP.enableEms:
+    if self.CP.carFingerprint in FEATURES["use_elect_ems"]:
       ret.gas = cp.vl["E_EMS11"]['Accel_Pedal_Pos'] / 256.
       ret.gasPressed = ret.gas > 0
     else:
@@ -475,7 +475,7 @@ class CarState(CarStateBase):
       signals += [
         ("CF_Lvr_Gear","LVR12",0),
       ]
-    if not CP.enableEms:
+    if CP.carFingerprint not in FEATURES["use_elect_ems"]:
       signals += [
         ("PV_AV_CAN", "EMS12", 0),
         ("CF_Ems_AclAct", "EMS16", 0),
@@ -498,7 +498,8 @@ class CarState(CarStateBase):
         ("FCA_CmdAct", "FCA11", 0),
         ("CF_VSM_Warn", "FCA11", 0),
       ]
-      checks += [("FCA11", 50)]
+      if not CP.openpilotLongitudinalControl:
+        checks += [("FCA11", 50)]
 
     if CP.carFingerprint in [CAR.SANTA_FE]:
       checks.remove(("TCS13", 50))
