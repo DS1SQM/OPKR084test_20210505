@@ -221,7 +221,7 @@ class CarState(CarStateBase):
         else:
           ret.gearShifter = GearShifter.unknown
 
-    if self.CP.enableFca:
+    if self.CP.carFingerprint in FEATURES["use_fca"]:
       ret.stockAeb = cp.vl["FCA11"]['FCA_CmdAct'] != 0
       ret.stockFcw = cp.vl["FCA11"]['CF_VSM_Warn'] == 2
     else:
@@ -493,7 +493,7 @@ class CarState(CarStateBase):
         ("E_EMS11", 100),
       ]
 
-    if CP.enableFca:
+    if CP.carFingerprint in FEATURES["use_fca"]:
       signals += [
         ("FCA_CmdAct", "FCA11", 0),
         ("CF_VSM_Warn", "FCA11", 0),

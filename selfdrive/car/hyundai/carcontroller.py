@@ -6,7 +6,7 @@ from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfahda_mfc, \
                                              create_scc11, create_scc12,  create_scc13, create_scc14, \
                                              create_mdps12, create_spas11, create_spas12, create_ems11
-from selfdrive.car.hyundai.values import Buttons, CarControllerParams, CAR
+from selfdrive.car.hyundai.values import Buttons, CarControllerParams, CAR, FEATURES
 from opendbc.can.packer import CANPacker
 from selfdrive.config import Conversions as CV
 
@@ -159,8 +159,6 @@ class CarController():
     self.accActive = False
 
     self.safety_camera_timer = 0
-    
-    self.enable_lfa = CP.enableLfa
 
     self.model_speed_range = [30, 100, 255]
     self.steerMax_range = [CarControllerParams.STEER_MAX, int(self.params.get("SteerMaxBaseAdj")), int(self.params.get("SteerMaxBaseAdj"))]
@@ -363,12 +361,12 @@ class CarController():
     can_sends = []
     can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    self.steer_wind_down, CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
-                                   left_lane_warning, right_lane_warning, self.enable_lfa, 0))
+                                   left_lane_warning, right_lane_warning, 0))
 
     if CS.mdps_bus or CS.scc_bus == 1: # send lkas11 bus 1 if mdps or scc is on bus 1
       can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    self.steer_wind_down, CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
-                                   left_lane_warning, right_lane_warning, self.enable_lfa, 1))
+                                   left_lane_warning, right_lane_warning, 1))
     if frame % 2 and CS.mdps_bus: # send clu11 to mdps if it is not on bus 0
       can_sends.append(create_clu11(self.packer, frame, CS.clu11, Buttons.NONE, enabled_speed, CS.mdps_bus))
 
@@ -541,7 +539,7 @@ class CarController():
       self.scc12_cnt += 1
 
     # 20 Hz LFA MFA message
-    if frame % 5 == 0 and self.enable_lfa:
+    if frame % 5 == 0 and self.car_fingerprint in FEATURES["send_lfahda_mfa"]:
       can_sends.append(create_lfahda_mfc(self.packer, frame, lkas_active))
 
     if CS.spas_enabled:
