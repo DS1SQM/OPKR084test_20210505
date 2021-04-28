@@ -191,6 +191,7 @@ DevicePanel::DevicePanel(QWidget* parent) : QWidget(parent) {
   QObject::connect(calinit_btn, &QPushButton::released, [=]() {
     if (ConfirmationDialog::confirm("캘리브레이션을 초기화할까요? 자동 재부팅됩니다.")) {
       Params().remove("CalibrationParams");
+      Params().remove("LiveParameters");
       QProcess::execute("reboot");
     }
   });
