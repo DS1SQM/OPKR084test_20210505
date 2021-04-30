@@ -187,6 +187,22 @@ class CarState(CarStateBase):
           ret.gearShifter = GearShifter.drive
         else:
           ret.gearShifter = GearShifter.unknown
+    # Gear for NEXO from neokii
+    elif self.CP.carFingerprint in [CAR.NEXO]:
+      gear = cp.vl["ELECT_GEAR"]["Elect_Gear_Shifter"]
+      if gear == 1546:
+        ret.gearShifter = GearShifter.drive
+      elif gear == 2314:
+        ret.gearShifter = GearShifter.neutral
+      elif gear == 2569:
+        ret.gearShifter = GearShifter.park
+      elif gear == 2566:
+        ret.gearShifter = GearShifter.reverse
+      else:
+        if self.gear_correction:
+          ret.gearShifter = GearShifter.drive
+        else:
+          ret.gearShifter = GearShifter.unknown
     # Gear Selecton - This is only compatible with optima hybrid 2017
     elif self.CP.carFingerprint in FEATURES["use_elect_gears"]:
       gear = cp.vl["ELECT_GEAR"]["Elect_Gear_Shifter"]
