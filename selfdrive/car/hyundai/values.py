@@ -629,7 +629,7 @@ DBC = {
   CAR.VELOSTER: dbc_dict('hyundai_kia_generic', None),
   CAR.GRANDEUR: dbc_dict('hyundai_kia_generic', None),
   CAR.GRANDEUR_HEV: dbc_dict('hyundai_kia_generic', None),
-  CAR.NEXO: dbc_dict('hyundai_kia_generic', None),
+  CAR.NEXO: dbc_dict('hyundai_kia_generic_nexo', None),
   # kia
   CAR.K3: dbc_dict('hyundai_kia_generic', None),
   CAR.K5: dbc_dict('hyundai_kia_generic', None),
