@@ -30,6 +30,8 @@ class CarInterface(CarInterfaceBase):
 
     ret.carName = "hyundai"
     ret.safetyModel = car.CarParams.SafetyModel.hyundaiLegacy
+    if candidate in [CAR.GRANDEUR_IG_FL_HEV, CAR.GRANDEUR_IG_FL]:
+      ret.safetyModel = car.CarParams.SafetyModel.hyundai
     #if candidate in [CAR.SONATA]:
     #  ret.safetyModel = car.CarParams.SafetyModel.hyundai
 
@@ -151,9 +153,12 @@ class CarInterface(CarInterfaceBase):
     elif candidate in [CAR.IONIQ_HEV, CAR.IONIQ_EV]:
       ret.mass = 1490. + STD_CARGO_KG   #weight per hyundai site https://www.hyundaiusa.com/ioniq-electric/specifications.aspx
       ret.wheelbase = 2.7
-    elif candidate in [CAR.GRANDEUR, CAR.GRANDEUR_HEV]:
+    elif candidate in [CAR.GRANDEUR_IG, CAR.GRANDEUR_IG_HEV]:
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
+    elif candidate in [CAR.GRANDEUR_IG_FL, CAR.GRANDEUR_IG_FL_HEV]:
+      ret.mass = 1675. + STD_CARGO_KG
+      ret.wheelbase = 2.885
     elif candidate == CAR.VELOSTER:
       ret.mass = 3558. * CV.LB_TO_KG
       ret.wheelbase = 2.80

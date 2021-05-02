@@ -70,9 +70,6 @@ class SpdController():
 
         self.traceSC = trace1.Loger("SPD_CTRL")
 
-        self.wheelbase = 2.8
-        self.steerRatio = 13.5  # 13.5
-
         self.v_model = 0
         self.a_model = 0
         self.v_cruise = 0

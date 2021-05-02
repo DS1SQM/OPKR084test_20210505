@@ -196,8 +196,10 @@ CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거
   vehicle_select_menu->addAction("SANTA_FE", [=]() {carname = "SANTA_FE";});
   vehicle_select_menu->addAction("PALISADE", [=]() {carname = "PALISADE";});
   vehicle_select_menu->addAction("VELOSTER", [=]() {carname = "VELOSTER";});
-  vehicle_select_menu->addAction("GRANDEUR", [=]() {carname = "GRANDEUR";});
-  vehicle_select_menu->addAction("GRANDEUR_HEV", [=]() {carname = "GRANDEUR_HEV";});
+  vehicle_select_menu->addAction("GRANDEUR_IG", [=]() {carname = "GRANDEUR_IG";});
+  vehicle_select_menu->addAction("GRANDEUR_IG_HEV", [=]() {carname = "GRANDEUR_IG_HEV";});
+  vehicle_select_menu->addAction("GRANDEUR_IG_FL", [=]() {carname = "GRANDEUR_IG_FL";});
+  vehicle_select_menu->addAction("GRANDEUR_IG_FL_HEV", [=]() {carname = "GRANDEUR_IG_FL_HEV";});
   vehicle_select_menu->addAction("NEXO", [=]() {carname = "NEXO";});
   vehicle_select_menu->addAction("K3", [=]() {carname = "K3";});
   vehicle_select_menu->addAction("K5", [=]() {carname = "K5";});
@@ -259,7 +261,7 @@ void CarRecognition::refresh(QString carname) {
   }
 }
 
-CarForceSet::CarForceSet() : AbstractControl("차량강제인식", "핑거프린트 문제로 차량인식이 안될경우 차량명을 입력하시면 강제 인식 합니다.\n\n입력방법) 아래 참조하여 대문자로 차량명만 입력\nGENESIS, GENESIS_G70, GENESIS_G80, GENESIS_G90, AVANTE, I30, SONATA, SONATA_HEV, SONATA19, SONATA19_HEV, KONA, KONA_EV, KONA_HEV, IONIQ_EV, IONIQ_HEV, SANTA_FE, PALISADE, VELOSTER, GRANDEUR, GRANDEUR_HEV, NEXO, K3, K5, K5_HEV, SPORTAGE, SORENTO, STINGER, NIRO_EV, NIRO_HEV, CEED, K7, K7_HEV, SELTOS", "../assets/offroad/icon_shell.png") {
+CarForceSet::CarForceSet() : AbstractControl("차량강제인식", "핑거프린트 문제로 차량인식이 안될경우 차량명을 입력하시면 강제 인식 합니다.\n\n입력방법) 아래 참조하여 대문자로 차량명만 입력\nGENESIS, GENESIS_G70, GENESIS_G80, GENESIS_G90, AVANTE, I30, SONATA, SONATA_HEV, SONATA19, SONATA19_HEV, KONA, KONA_EV, KONA_HEV, IONIQ_EV, IONIQ_HEV, SANTA_FE, PALISADE, VELOSTER, GRANDEUR_IG, GRANDEUR_IG_HEV, GRANDEUR_IG_FL, GRANDEUR_IG_FL_HEV, NEXO, K3, K5, K5_HEV, SPORTAGE, SORENTO, STINGER, NIRO_EV, NIRO_HEV, CEED, K7, K7_HEV, SELTOS, SOUL_EV", "../assets/offroad/icon_shell.png") {
 
   // setup widget
   //hlayout->addStretch(1);
